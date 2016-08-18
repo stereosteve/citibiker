@@ -1,6 +1,8 @@
 let cheerio = require('cheerio')
 let fs = require('fs')
 
+
+
 var trips = []
 
 var files = fs.readdirSync('raw')
@@ -45,3 +47,21 @@ function convertDuration(dur) {
 
 
 fs.writeFileSync("trips.json", JSON.stringify(trips, undefined, 2))
+
+
+// -----------------------------------------------------------------------------
+
+
+// load station data
+var stationData = JSON.parse(fs.readFileSync("data/stations.json", "utf8"))
+var stationMap = {}
+stationData.stationBeanList.forEach(function (s) {
+  stationMap[s.stationName] = s
+})
+
+
+// render HTML
+var nunjucks = require('nunjucks')
+nunjucks.configure('views', { autoescape: true });
+var html = nunjucks.render('t.html', { trips: trips, stationMap: stationMap });
+fs.writeFileSync("trips.html", html)

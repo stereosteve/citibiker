@@ -33,7 +33,11 @@ function* run() {
 
 
   for (var page = 1; page <= numPages; page++) {
-    yield nm.html("raw/page" + page + ".html", "HTMLOnly")
+    var fileName = page.toString()
+    while (fileName.length < 4) {
+      fileName = "0" + fileName
+    }
+    yield nm.html("raw/page" + fileName + ".html", "HTMLOnly")
             .click(".ed-paginated-navigation__pages-group__link_next")
             .wait(2000)
   }
