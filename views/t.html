@@ -3,36 +3,67 @@
   <head>
     <meta charset="utf-8">
     <title>trips</title>
+    <style media="screen">
+      body {
+        font-family: sans-serif;
+      }
+      dl {
+        margin-top: 0;
+      }
+      dt {
+        color: #ccc;
+      }
+      dd {
+        font-weight: bold;
+      }
+      .tripsTable td {
+        border-top: 1px solid #eee;
+        vertical-align: top;
+        padding: 20px;
+      }
+    </style>
   </head>
   <body>
-    <h1>trips</h1>
-    {% for trip in trips %}
-      <hr>
-      <h1>{{trip.date}}</h1>
+    <h1>{{profile.username}}</h1>
+    <div style="padding: 20px;">
+      <em><a href="https://github.com/stereosteve/citibiker" target="_blank">citibiker</a> demo from my personal data</em>
+    </div>
+    <table class="tripsTable">
+      {% for trip in trips %}
+        <tr>
+          <td>
+            <dl>
 
-      <dl>
+              <dt>Date</dt>
+              <dd>{{trip.displayDate}}</dd>
 
-        <dt>Start Station</dt>
-        <dd>{{trip.startStation}}</dd>
+              <dt>A</dt>
+              <dd>{{trip.startStation}}</dd>
 
-        <dt>End Station</dt>
-        <dd>{{trip.endStation}}</dd>
+              <dt>B</dt>
+              <dd>{{trip.endStation}}</dd>
 
-        <dt>Duration</dt>
-        <dd>{{trip.duration}}</dd>
+              <dt>Took</dt>
+              <dd>{{trip.duration}}</dd>
 
-      </dl>
+            </dl>
+          </td>
+          <td>
 
-      {% set startStation = stationMap[trip.startStation] %}
-      {% set endStation = stationMap[trip.endStation] %}
-      {% if startStation or endStation %}
-        <img src="https://maps.googleapis.com/maps/api/staticmap?
-                  &size=600x300
-                  &maptype=terrain
-                  &markers=color:green|label:S|{{startStation.latitude}},{{startStation.longitude}}
-                  &markers=color:red|label:E|{{endStation.latitude}},{{endStation.longitude}}
-                  &key=AIzaSyBAsdGLGFJfUQ2mU4jLW2FYxG5x96wuA3E" />
-      {% endif %}
-    {% endfor %}
+            {% set startStation = stationMap[trip.startStation] %}
+            {% set endStation = stationMap[trip.endStation] %}
+            {% if startStation or endStation %}
+              <img width="300" height="300"
+                   src="https://maps.googleapis.com/maps/api/staticmap?
+                        &size=300x300
+                        &maptype=terrain
+                        &markers=color:0x9acd32|label:A|{{startStation.latitude}},{{startStation.longitude}}
+                        &markers=color:0x006400|label:B|{{endStation.latitude}},{{endStation.longitude}}
+                        &key=AIzaSyBAsdGLGFJfUQ2mU4jLW2FYxG5x96wuA3E" />
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
   </body>
 </html>

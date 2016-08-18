@@ -24,6 +24,9 @@ function* run() {
     .insert('form[action*="login_check"] [name=_password]', citibikePassword)
     .click('form[action*="login_check"] [type=submit]')
     .wait('.ed-profile-menu__link_trips')
+    .html("raw/intro.html", "HTMLOnly")
+
+  nm
     .click('.ed-profile-menu__link_trips a')
     .wait('.ed-table__item')
 
@@ -39,7 +42,7 @@ function* run() {
     }
     yield nm.html("raw/page" + fileName + ".html", "HTMLOnly")
             .click(".ed-paginated-navigation__pages-group__link_next")
-            .wait(2000)
+            .wait(".ed-paginated-navigation__pages-group__link_next")
   }
 
 
