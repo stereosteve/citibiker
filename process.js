@@ -8,28 +8,6 @@ var profile = processProfile();
 fs.writeFileSync("trips.json", JSON.stringify(trips, undefined, 2))
 
 
-// -----------------------------------------------------------------------------
-
-
-// load station data
-var stationData = JSON.parse(fs.readFileSync("data/stations.json", "utf8"))
-var stationMap = {}
-stationData.stationBeanList.forEach(function (s) {
-  stationMap[s.stationName] = s
-})
-
-
-// render HTML
-var nunjucks = require('nunjucks')
-nunjucks.configure('views', { autoescape: true });
-var html = nunjucks.render('t.html', {
-  trips: trips,
-  profile: profile,
-  stationMap: stationMap
-});
-fs.writeFileSync("trips.html", html)
-
-
 
 // -----------------------------------------------------------------------------
 
@@ -67,7 +45,7 @@ function processTrips() {
       trip.duration = $(this).find('.ed-table__item__info_trip-duration').text().trim()
       trip.cost = $(this).find('.ed-table__col_trip-cost').text().trim()
 
-      trip.durationHours = convertDuration(trip.duration)
+      trip.durationSeconds = convertDuration(trip.duration)
       trip.displayDate = new Date(trip.date)
 
       // One time I didn't dock a bike properly and eneded up with a 13 hour ride.
@@ -90,5 +68,5 @@ function convertDuration(dur) {
   if (m) seconds += m * 60
   if (h) seconds += h * 3600
 
-  return seconds / 3600
+  return seconds
 }
