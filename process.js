@@ -1,5 +1,6 @@
 let cheerio = require('cheerio')
 let fs = require('fs')
+var csvWriter = require('csv-write-stream')
 
 
 var trips = processTrips();
@@ -7,6 +8,51 @@ var profile = processProfile();
 
 fs.writeFileSync("trips.json", JSON.stringify(trips, undefined, 2))
 
+
+// -------------------------------------
+var writer = csvWriter({ headers: [
+  "first_name",
+  "last_name",
+  "username",
+  "email",
+  "gender",
+  "birth_year",
+  "dob",
+  "member_since",
+
+  "start_time",
+  "trip_duration",
+  "start_station_name",
+  "end_station_name",
+
+  "start_station_id",
+  "end_station_id",
+]})
+writer.pipe(fs.createWriteStream('trips.csv'))
+trips.forEach(function (trip) {
+
+  var gender = profile.gender == 'Male' ? 1 : 2;
+  var birthYear = new Date(profile.dateOfBirth).getUTCFullYear();
+
+  writer.write([
+    profile.firstName,
+    profile.lastName,
+    profile.username,
+    profile.email,
+    gender,
+    birthYear,
+    profile.dateOfBirth,
+    profile.member_since,
+
+    trip.date,
+    trip.durationSeconds,
+    trip.startStation,
+    trip.endStation,
+
+    0,
+    0
+  ])
+})
 
 
 // -----------------------------------------------------------------------------
